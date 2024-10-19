@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+    <style>
+        .grid-container{
+            display: grid;
+            grid-template-columns:8fr 1fr;
+            width: 100%;
+            
+        }
+        .grid-item1{
+            background-color: rgb(177, 117, 117);
+        }
+        .grid-item2{
+            background-color: aquamarine;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="grid-item1"><button onclick="diplaygrd()" >pop</button></div>
+        <div class="grid-item2" style="display: none;">2</div>
+  </div>
+
+
+  <script>
+    function diplaygrd() {
+      var elem=document.querySelector('.grid-item2');
+      if (elem.style.display === 'none') {
+                elem.style.display = 'block';
+            } else {
+                elem.style.display = 'none';
+            }
+    }
+  </script>
+</body>
+</html>

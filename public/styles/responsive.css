@@ -1,0 +1,50 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* dividers */
+
+.thin-divider {
+    border: none;
+    border-top: 1px solid #999; 
+    margin: 20px 0; 
+    width: 80%; 
+  }
+  .thik-divider{
+    border:none ;
+    border-top: 1px solid #080808; 
+    margin: 10px 0; 
+    width: 80%; 
+}
+.thin-divider-1{
+    border: none;
+    border-top: 1px solid #d4d1d1;
+    margin: 20px 0; 
+    width: 80%; 
+}
+.thin-divider-menu{
+    border: none;
+    border-top: 1px solid #d4d1d1; 
+    margin: 10px 0; 
+    width: 100%; 
+}

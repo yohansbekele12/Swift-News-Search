@@ -1,0 +1,51 @@
+body{
+    margin: 0;
+    padding: 0;
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+.searchbtn{
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input{
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    width: 200px;
+}
+
+
+
+/* gpt response  */
+
+.gpt-response{
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    font-size: 1.2rem;
+}
+
+.chatresponsbox{
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+
+
