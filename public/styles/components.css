@@ -38,13 +38,28 @@
 
 /* news list */
 
+
+.news-image{
+    margin-bottom: 100px;
+    
+}
+
+/* image  */
+img{
+    width: 300px;
+    height: auto;
+}
+
+
+
+
 .news{
     height: 200px;
     padding: 20px;
     margin: 20;
     
-    border-radius: 10px;
-    
+    display: grid;
+    grid-template-columns:7fr 1fr; 
 }
 
 .news a{

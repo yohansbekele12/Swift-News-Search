@@ -48,3 +48,40 @@
     margin: 10px 0; 
     width: 100%; 
 }
+
+#logo {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    margin-right: 0; /* Space between logo and the title */
+}
+
+.logo{
+    font-family: 'Lobster', cursive;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.footer {
+    background-color: #f9f9f9; /* Softer light background */
+    padding: 15px;
+    text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    color: #333; /* Professional dark text color */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.footer a {
+    color: #007BFF; /* Blue link for a professional touch */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}

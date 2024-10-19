@@ -6,11 +6,18 @@
         <div class="rows">
           <% if (articles && articles.length) { %>
             <% articles.forEach(article => { %>
+             
               <div class="news">
+                <div>
                 <span class="date"><%= article.publishedAt.slice(0,10); %></span>
                 <a href="<%= article.url %>"><%= article.title %></a> <br>
                <span class="title"><%= article.description %></span>
                <span class="title"><%= article.content.slice(0,-12) %></span>
+              </div>
+              <div class="news-image">
+                <img src="<%= article.urlToImage %>" alt="">
+            </div>
+               
             </div>
             <hr class="thin-divider-1">
            <% }); %>
@@ -27,6 +34,6 @@
 
    </div>
            
-           
+   <%- include("partials/footer.ejs") %>        
             
 

@@ -7,75 +7,47 @@ body{
 
 }
 
-.thin-divider {
+.searchbtn{
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
     border: none;
-    border-top: 1px solid #999; /* Light gray line */
-    margin: 20px 0; /* Adds space above and below the line */
-    width: 80%; /* Adjust width if needed */
-  }
-  
-
-.navbar{
-    background-color: #333;
-    padding: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-}
-
-.news{
-    
-    padding: 20px;
-    margin: 20;
     border-radius: 10px;
-    height: 200px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-
-
-a{
-    color: rgb(10, 10, 10);
-    font-family: 'Times New Roman', Times, serif;
-    text-decoration: none;
-    font-size: 1.5rem;
-}
-
-a:hover{
-    text-decoration-line: underline;
-}
-.thik-divider{
-    border:none ;
-    border-top: 1px solid #080808; /* Light gray line */
-    margin: 10px 0; /* Adds space above and below the line */
-    width: 80%; /* Adjust width if needed */
-}
-.navigation-page-title{
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-left: 20px;
-}
-
-.thin-divider-1{
+input{
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
     border: none;
-    border-top: 1px solid #d4d1d1; /* Light gray line */
-    margin: 20px 0; /* Adds space above and below the line */
-    width: 80%; /* Adjust width if needed */
+    width: 200px;
 }
 
-.date{
-    width: 20px;
-    font-size: 1rem;
-    margin-left: 20px;
+
+
+/* gpt response  */
+
+.gpt-response{
+    margin: 20px;
     padding: 20px;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    font-size: 1.2rem;
 }
 
-.title{
-    color: #201f1f;
-    width: 80%;
-    font-size: 1rem;
-    margin-left:120px;
-    display: flex;
+.chatresponsbox{
+    margin: 20px;
     padding: 20px;
-    flex-wrap:wrap-reverse;
+    border-radius: 10px;
+    background-color: #fff;
+    font-size: 1rem;
+    margin-bottom: 10px;
 }
+
+
+
+/* img container  */
+

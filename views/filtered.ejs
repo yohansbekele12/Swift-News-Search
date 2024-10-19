@@ -2,22 +2,33 @@
 
 
 <div class="container">
-    <div class="rows">
-      <% if (articles && articles.length > 0 ) { %>
-        <% articles.forEach(article => { %>
-          <div class="news">
-            <span class="date"><%= article.publishedAt.slice(0,10); %></span>
-            <a href="<%= article.url %>"><%= article.title %></a> <br>
-           <span class="title"><%= article.description %></span>
+  <div class="rows">
+    <% if (articles && articles.length ) { %>
+      <% articles.forEach(article => { %>
+       
+        <div class="news">
+          <div>
+          <span class="date"><%= article.publishedAt.slice(0,10); %></span>
+          <a href="<%= article.url %>"><%= article.title %></a> <br>
+         <span class="title"><%= article.description %></span>
+         <span class="title"><%= article.content.slice(0,-12) %></span>
         </div>
-        <hr class="thin-divider-1">
-       <% }); %>
-      <% } %>
-    </div> 
-    <div class="gptresponse" style="display: none;">
-      <h2>AI ANALYSIS </h2>
-      <div class="chatresponsbox">
-     <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo sed eius amet aliquam commodi repellendus atque? Saepe cum minus hic nemo dolorum minima commodi, at, ut assumenda voluptas odio dolores!</p>
-    </div>
-    </div>
+        <div class="news-image">
+          <img src="<%= article.urlToImage %>" alt="">
+      </div>
+         
+      </div>
+      <hr class="thin-divider-1">
+     <% }); %>
+    <% } %>
+   
+  </div> 
+  
+  <div class="gptresponse" style="display: none;">
+    <h2>AI ANALYSIS </h2>
+    <div class="chatresponsbox">
+   <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo sed eius amet aliquam commodi repellendus atque? Saepe cum minus hic nemo dolorum minima commodi, at, ut assumenda voluptas odio dolores!</p>
+  </div>
+  </div>
+
 </div>
