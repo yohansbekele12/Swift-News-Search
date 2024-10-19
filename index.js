@@ -12,7 +12,8 @@ const API_KEY = process.env.API_KEY;
 const newsapi = new NewsAPI(API_KEY);
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
+
 
 
 app.set('view engine', 'ejs');
