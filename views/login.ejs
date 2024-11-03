@@ -53,8 +53,10 @@
       }
 
       /* Logo */
-      .logo {
-        width: 80px;
+      .login-box logo {
+        display: flex;
+        justify-content: center;
+        width: 300px;
         margin-bottom: 20px;
       }
 
@@ -74,7 +76,16 @@
         font-size: 1em;
       }
 
+      form label {
+        display: block;
+        margin-bottom: 5px;
+        margin-left: 50px;
+        color: #666;
+        font-size: 0.9em;
+      }
+
       form button {
+        margin-top: 10px;
         width: 100%;
         padding: 10px;
         border: none;
@@ -175,16 +186,18 @@
     <!-- Transparent Overlay for Login Page -->
     <div class="overlay">
       <a href="/" class="close-button">×</a>
+
       <div class="login-box">
         <% if (message) { %>
         <p class="message"><%= message %></p>
         <% } %>
+        <div class="logo">Swift news</div>
         <h2>Login</h2>
         <form action="/login" method="POST">
-          <label for="username">Username:</label>
+          <label for="username">Username</label>
           <input type="text" id="username" name="username" required />
           <br />
-          <label for="password">Password:</label>
+          <label for="password">Password</label>
           <input type="password" id="password" name="password" required />
           <br />
           <button type="submit">Login</button>
