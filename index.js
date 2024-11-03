@@ -5,6 +5,15 @@ import NewsAPI from "newsapi";
 import dotenv from "dotenv";
 import db from "./db.js";
 import session from "express-session";
+import path from "path";
+import { fileURLToPath } from "url";
+import bcrypt from "bcrypt";
+import flash from "connect-flash";
+
+// Create __dirname equivalent for ES modules
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -23,10 +32,14 @@ app.use(
     cookie: { secure: false },
   })
 );
-
+app.use(flash());
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
+app.use(
+  "/bootstrap",
+  express.static(path.join(__dirname, "node_modules/bootstrap/dist"))
+);
 
 //Middleware to check user log status
 
@@ -35,6 +48,27 @@ function isAuthenticated(req, res, next) {
     next();
   } else {
     res.redirect("/login");
+  }
+}
+
+// Middleware to stor username in res.locals
+
+app.use((req, res, next) => {
+  res.locals.username = req.session.user || null;
+  next();
+});
+
+// Middleware to fetch articles
+async function fetchArticles(req, res, next) {
+  try {
+    const response = await axios.get(
+      `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`
+    );
+    res.locals.articles = response.data.articles; // Store in res.locals
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 }
 
@@ -65,7 +99,7 @@ app.post("/filter", isAuthenticated, async (req, res) => {
   try {
     const response = await newsapi.v2.everything(params);
     const { articles = [] } = response;
-    res.render("filtered", { articles });
+    res.render("filtered", { articles, username: req.session.user });
     console.log(response.articles);
   } catch (error) {
     console.log(error);
@@ -93,44 +127,92 @@ app.get("/signup", (req, res) => {
 });
 
 // Register Route
-app.post("/registered", (req, res) => {
+app.post("/register", (req, res) => {
   const { username, password } = req.body;
-  const query = "INSERT INTO users (username, password) VALUES (?, ?)";
 
-  db.query(query, [username, password], (err, results) => {
+  // Encrypt password
+  bcrypt.hash(password, 10, (err, hash) => {
     if (err) {
       console.error(err);
-      res.render("register", { message: "fail to register please try again." });
-    } else {
-      res.send("User registered successfully!");
-      res.redirect("/", {
-        message:
-          "you have registerd successfully to have advance access and serch log in ",
-      });
+      return res.status(500).send("Error hashing password."); // Ensure to return here
     }
+
+    console.log("Password hashed:", hash);
+    const query = "INSERT INTO users (username, password) VALUES (?, ?)";
+
+    db.query(query, [username, hash], (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.render("register", {
+          // Return to avoid further execution
+          message: "Failed to register. Please try again.",
+        });
+      } else {
+        // Assuming you are using flash messages
+        req.flash(
+          "success",
+          "You have registered successfully! Please log in."
+        ); // Use flash message
+        return res.redirect("/"); // Redirect without trying to send a message
+      }
+    });
   });
 });
 
 // Render login page
 
-app.get("/login", (req, res) => {
-  res.render("login");
+app.get("/login", fetchArticles, (req, res) => {
+  const successMessage = req.flash("success");
+  const errorMessage = req.flash("error");
+  let message = "";
+  let articles = "";
+
+  if (successMessage.length > 0) {
+    message = successMessage[0];
+  } else if (errorMessage.length > 0) {
+    message = errorMessage[0];
+  }
+  return res.render("login", { message, articles: res.locals.articles });
 });
 
 // Post Login Route
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
-  const query = "SELECT * FROM users WHERE username = ? AND password = ?";
+  const query = "SELECT * FROM users WHERE username = ?";
+  let articles = "";
 
-  db.query(query, [username, password], (err, results) => {
+  db.query(query, [username], (err, results) => {
     if (err) {
       console.error(err);
-      res.status(500).send("Error logging in.");
-    } else if (results.length > 0) {
-      req.session.user = username; // Set session user
-      res.redirect("/filter"); // Redirect to /filter after login
+      return res.status(500).send("Error logging in.");
+    }
+
+    if (results.length > 0) {
+      const user = results[0]; // Get the first result
+      // Compare password using bcrypt
+      bcrypt.compare(password, user.password, (err, isMatch) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send("Error checking password.");
+        }
+
+        if (isMatch) {
+          req.session.user = username; // Set session user
+          return res.redirect("/filter"); // Redirect to /filter after login
+        } else {
+          // Password does not match
+          res.render("login", {
+            articles: res.locals.articles,
+            message: "Login failed, User name or password not match.",
+          });
+        }
+      });
     } else {
-      res.send("Invalid username or password.");
+      // No user found
+      res.render("login", {
+        articles: res.locals.articles,
+        message: "no User found with this name, please try again.",
+      });
     }
   });
 });

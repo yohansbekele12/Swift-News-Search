@@ -72,9 +72,7 @@
   <body>
     <div class="register-container">
       <h2>Register an Account</h2>
-      <% if (message) { %>
-      <p class="message"><%= message %></p>
-      <% } %>
+
       <form action="/register" method="POST">
         <label for="username">Username</label>
         <input type="text" id="username" name="username" required />

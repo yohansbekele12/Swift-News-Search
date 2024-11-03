@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Search News</title>
-    <link rel="stylesheet" href="/styles/styles1.css" />
+
     <link rel="stylesheet" href="/styles/styles.css" />
     <link rel="stylesheet" href="/styles/components.css" />
     <link rel="stylesheet" href="/styles/responsive.css" />
@@ -27,7 +27,18 @@
             <a href="#">Tech</a>
           </li>
           <li class="item">
-            <button onclick="displayGPT()">GPT</button>
+            <% if (username) { %>
+            <span class="username"><%= username %></span>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/profile-settings"
+                >Profile Settings</a
+              >
+              <a class="dropdown-item" href="/logout">Logout</a>
+            </div>
+            <% } %>
+          </li>
+          <li>
+            <button onclick="displaygrd">GPT Analysis</button>
           </li>
         </ul>
       </nav>
@@ -89,13 +100,25 @@
     <hr class="thin-divider-menu" />
 
     <script>
-      function displayGPT() {
+      function displaygrd() {
         var elem = document.querySelector(".gptresponse");
         if (elem.style.display === "none") {
           elem.style.display = "block";
         } else {
           elem.style.display = "none";
         }
+      }
+
+      // Example usage of dropdown menu
+      // Corrected JavaScript code
+      const username = document.querySelector(".username");
+      const dropdown = document.querySelector(".dropdown");
+
+      if (username) {
+        username.addEventListener("click", () => {
+          dropdown.style.display =
+            dropdown.style.display === "none" ? "block" : "none";
+        });
       }
     </script>
   </body>

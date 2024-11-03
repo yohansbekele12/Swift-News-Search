@@ -1,154 +1,177 @@
-/* navbar header */
-.navbar-container{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-    padding: 5px;
+/* Navbar Styles */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #333;
+  color: white;
 }
 
-/* menu  */
-.navbar-menu{
-    display: flex;
-    margin-right: 20px;
+.navbar-menu {
+  display: flex;
+  margin-right: 15px;
 }
 
-.list{
-    display: flex;
-    gap: 10px;
-}
-.item{
-    list-style: none;
-}
-
-.item a{
-    color: rgb(10, 10, 10);
-    font-family: 'Times New Roman', Times, serif;
-    text-decoration: none;
-    font-size: 1 rem;
+.list {
+  display: flex;
+  list-style: none;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
 }
 
-.item a:hover{
-    text-decoration-line: underline;
-   
+.item {
+  list-style: none;
+  margin: 0 15px;
+  position: relative; /* Needed for dropdown positioning */
 }
 
-
-
-
-/* news list */
-
-
-.news-image{
-    margin-bottom: 100px;
-    
+.item a {
+  color: white;
+  text-decoration: none;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1rem;
 }
 
-/* image  */
-img{
-    width: 300px;
-    height: auto;
+.item a:hover {
+  text-decoration-line: underline;
 }
 
-
-
-
-.news{
-    height: 200px;
-    padding: 20px;
-    margin: 20;
-    
-    display: grid;
-    grid-template-columns:7fr 1fr; 
+/* Dropdown Styles */
+.dropdown-menu {
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 100%; /* Position below the parent */
+  left: 0;
+  background-color: #333;
+  color: black;
+  border: 1px solid #ccc;
+  z-index: 1;
+  min-width: 150px;
+  padding: 0;
+  margin: 0;
 }
 
-.news a{
-    color: rgb(10, 10, 10);
-    font-family: 'Times New Roman', Times, serif;
-    text-decoration: none;
-    font-size: 1.5rem;
+/* Show dropdown on hover */
+.item:hover .dropdown-menu {
+  display: block; /* Show when hovering over .item */
 }
 
-.news a:hover{
-    text-decoration-line: underline;
+.dropdown-item {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: black;
 }
 
-.navigation-page-title{
-   margin-left: 20px;
-
-   font-size: 1.5rem;
-   font-weight: bold;
+.dropdown-item:hover {
+  background-color: #1f1d1d;
 }
 
-.date{
-    width: 20px;
-    margin-left: 20px;
-    padding: 20px;
-
-    font-size: 1rem;
+/* Logo */
+.logo {
+  font-family: "Lobster", cursive;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 20px;
 }
 
-.title{
-    width: 80%;
-    display: flex;
-    flex-wrap:wrap-reverse;
-    padding: 20px;
-    margin-left:120px;
-    
-    color: #201f1f;
-    font-size: 1rem;
+/* Filters and Search */
+form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
 }
 
-
-/* filter and search */
-
-form{
-    display: flex;
-    flex-direction: row;
-    
+.filter {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
 }
 
-.filter{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    flex-wrap: wrap;
-
-    padding-left: 50px;
-    
-    
+.filter label {
+  margin-bottom: 5px;
+  font-size: small;
 }
 
-label{
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1rem;
-   
+.filter select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-select{
-    
-    border: none;
-    margin-top: 20px;
+.right {
+  width: 100vh;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.right{
-    width: 100%;
-   
-    display: flex;
-    justify-content: flex-end;
+.right input {
+  margin-right: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-
-.container{
-    display: grid;
-    grid-template-columns: 7fr 2fr;
+.right .searchbtn {
+  padding: 6px 12px;
+  border-radius: 5px;
 }
 
+/* News List Styles */
+.news {
+  padding: 20px;
+  margin: 20px;
+  display: grid;
+  grid-template-columns: 1fr 300px; /* Adjusted to match image width */
+  gap: 20px;
+}
 
-.gptresponse{
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #f2f2f2;
-    font-size: 1rem;
+.news a {
+  color: rgb(10, 10, 10);
+  font-family: "Times New Roman", Times, serif;
+  text-decoration: none;
+  font-size: 1.5rem;
+}
+
+.news a:hover {
+  text-decoration-line: underline;
+}
+
+.news-image {
+  margin-bottom: 100px;
+}
+
+.news-image img {
+  width: 300px;
+  height: auto;
+}
+
+/* GPT Response */
+.gptresponse {
+  margin: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f1f1f1;
+  font-size: 1.2rem;
+}
+
+.chatresponsbox {
+  margin: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+/* Dividers */
+.thin-divider-menu {
+  border: none;
+  border-top: 1px solid #d4d1d1;
+  margin: 10px 0;
+  width: 100%;
 }

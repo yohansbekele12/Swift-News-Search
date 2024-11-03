@@ -1,53 +1,85 @@
-body{
-    margin: 0;
-    padding: 0;
-    display:flex;
-    justify-content: center;
-    flex-direction: column;
-
+/* Reset and Base Styles */
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
-.searchbtn{
-    margin: 20px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+input {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-input{
-    margin: 20px;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    width: 200px;
+select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-
-
-/* gpt response  */
-
-.gpt-response{
-    margin: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #f1f1f1;
-    font-size: 1.2rem;
+label {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
 }
 
-.chatresponsbox{
-    margin: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #fff;
-    font-size: 1rem;
-    margin-bottom: 10px;
+/* Buttons */
+.searchbtn {
+  padding: 6px 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
+.searchbtn:hover {
+  background-color: #45a049;
+}
 
+/* General Layout */
+.navigation-page-title {
+  margin-left: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
 
-/* img container  */
+.date {
+  margin-left: 20px;
+  padding: 20px;
+  font-size: 1rem;
+}
 
+.title {
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  padding: 20px;
+  margin-left: 120px;
+  color: #201f1f;
+  font-size: 1rem;
+}
+
+/* Dividers */
+.thin-divider {
+  border: none;
+  border-top: 1px solid #999;
+  margin: 20px 0;
+  width: 80%;
+}
+
+.thik-divider {
+  border: none;
+  border-top: 1px solid #080808;
+  margin: 10px 0;
+  width: 80%;
+}
+
+.thin-divider-1 {
+  border: none;
+  border-top: 1px solid #d4d1d1;
+  margin: 20px 0;
+  width: 80%;
+}

@@ -1,87 +1,51 @@
+/* Responsive Design */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* dividers */
-
-.thin-divider {
-    border: none;
-    border-top: 1px solid #999; 
-    margin: 20px 0; 
-    width: 80%; 
+/* Mobile Devices */
+@media only screen and (max-width: 768px) {
+  /* Navbar adjustments */
+  .navbar-container {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  .thik-divider{
-    border:none ;
-    border-top: 1px solid #080808; 
-    margin: 10px 0; 
-    width: 80%; 
-}
-.thin-divider-1{
-    border: none;
-    border-top: 1px solid #d4d1d1;
-    margin: 20px 0; 
-    width: 80%; 
-}
-.thin-divider-menu{
-    border: none;
-    border-top: 1px solid #d4d1d1; 
-    margin: 10px 0; 
-    width: 100%; 
-}
 
-#logo {
-    width: 100px; /* Adjust size as needed */
-    height: auto;
-    margin-right: 0; /* Space between logo and the title */
-}
+  .list {
+    flex-direction: column;
+    gap: 5px;
+  }
 
-.logo{
-    font-family: 'Lobster', cursive;
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-left: 20px;
-}
+  /* News List adjustments */
+  .news {
+    grid-template-columns: 1fr;
+  }
 
-.footer {
-    background-color: #f9f9f9; /* Softer light background */
-    padding: 15px;
-    text-align: center;
-    position: fixed;
-    left: 0;
-    bottom: 0;
+  .news-image img {
     width: 100%;
-    font-family: 'Arial', sans-serif;
+  }
+
+  /* Filters and Search adjustments */
+  form {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter {
+    margin-bottom: 10px;
+  }
+
+  .right {
+    justify-content: flex-start;
+  }
+
+  .right input,
+  .right .searchbtn {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* GPT Response adjustments */
+  .gptresponse,
+  .chatresponsbox {
+    margin: 10px;
     font-size: 1rem;
-    color: #333; /* Professional dark text color */
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-}
-
-.footer a {
-    color: #007BFF; /* Blue link for a professional touch */
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.footer a:hover {
-    text-decoration: underline;
+  }
 }
