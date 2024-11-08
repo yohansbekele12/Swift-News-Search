@@ -37,7 +37,7 @@ Swift News Search is a web application designed to help users search, filter, an
 4. **Run the Application**:
    Start the application:
    ```bash
-   npm start
+   nodemon index.js
    ```
 
 5. **Access the Application**:
