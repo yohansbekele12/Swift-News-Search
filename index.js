@@ -3,12 +3,17 @@ import bodyParser from "body-parser";
 import axios from "axios";
 import NewsAPI from "newsapi";
 import dotenv from "dotenv";
-import db from "./db.js";
+import pg from "pg";
 import session from "express-session";
 import path from "path";
 import { fileURLToPath } from "url";
 import bcrypt from "bcrypt";
 import flash from "connect-flash";
+import passport from "passport";
+import Googlestrategy from "passport-google-oauth20";
+import { Strategy } from "passport-local";
+import { access } from "fs";
+import { profile } from "console";
 
 // Create __dirname equivalent for ES modules
 
@@ -17,21 +22,34 @@ const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
-// Good staff
+//
 const app = express();
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.APK_KEY;
 const newsapi = new NewsAPI(API_KEY);
 const port = process.env.PORT;
+const saltRounds = 10;
 
 //session config
 app.use(
   session({
-    secret: "loka",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: { maxAge: 6000 * 24 * 7, secure: false },
   })
 );
+app.use(passport.initialize());
+app.use(passport.session());
+
+const db = new pg.Client({
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
+});
+db.connect();
+
 app.use(flash());
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -43,13 +61,21 @@ app.use(
 
 //Middleware to check user log status
 
-function isAuthenticated(req, res, next) {
-  if (req.session.user) {
-    next();
+//middleware to check user Authentication
+function AuthUser(req, res, next) {
+  if (
+    req.isAuthenticated() &&
+    (req.user.strategy === "local" || req.user.strategy === "google")
+  ) {
+    return next();
   } else {
     res.redirect("/login");
   }
 }
+
+//middleware to protected routes
+
+app.use("/protected", AuthUser);
 
 // Middleware to stor username in res.locals
 
@@ -88,8 +114,9 @@ app.get("/", async (req, res) => {
 });
 
 // Filtered article search route for authenticated users
-app.post("/filter", isAuthenticated, async (req, res) => {
+app.post("/protected/filter", async (req, res) => {
   const { country, source, q, category, language } = req.body;
+  const user = req.user;
   const params = {
     source: source,
     q: q,
@@ -99,7 +126,7 @@ app.post("/filter", isAuthenticated, async (req, res) => {
   try {
     const response = await newsapi.v2.everything(params);
     const { articles = [] } = response;
-    res.render("filtered", { articles, username: req.session.user });
+    res.render("filtered", { articles, user });
     console.log(response.articles);
   } catch (error) {
     console.log(error);
@@ -107,13 +134,16 @@ app.post("/filter", isAuthenticated, async (req, res) => {
 });
 
 //render filter page
-app.get("/filter", isAuthenticated, async (req, res) => {
+app.get("/protected/filter", async (req, res) => {
   try {
+    const user = req.user;
+
+    console.log(user);
     const response = await axios.get(
       `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`
     );
     const result = response.data;
-    res.render("filtered", { articles: result.articles });
+    res.render("filtered", { articles: result.articles, user });
     console.log(result.articles);
   } catch (error) {
     console.log(error);
@@ -123,40 +153,43 @@ app.get("/filter", isAuthenticated, async (req, res) => {
 //render signUp page
 
 app.get("/signup", (req, res) => {
-  res.render("register");
+  res.render("register", { message: null });
 });
 
 // Register Route
-app.post("/register", (req, res) => {
-  const { username, password } = req.body;
+app.post("/register", async (req, res) => {
+  const { username, password, email, term } = req.body;
+  console.log(password);
+  try {
+    const checkUser = await db.query("SELECT * FROM users WHERE email =$1", [
+      email,
+    ]);
 
-  // Encrypt password
-  bcrypt.hash(password, 10, (err, hash) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("Error hashing password."); // Ensure to return here
+    if (checkUser.rows.length > 0) {
+      res.render("register", {
+        message: "user with this email alredy exist please log in instade ",
+      });
+    } else {
+      bcrypt.hash(password, saltRounds, async (err, hash) => {
+        if (err) console.error(err);
+        const newuser = await db.query(
+          "INSERT INTO users (username, email, password,terms) VALUES ($1,$2,$3,$4)",
+          [username, email, hash, term]
+        );
+
+        if (newuser.rowCount > 0) {
+          res.render("login", {
+            message: "registerd succesfully log in to your account  ",
+          });
+          console.log(newuser.rows[0]);
+        } else {
+          console.log("entry faild ");
+        }
+      });
     }
-
-    console.log("Password hashed:", hash);
-    const query = "INSERT INTO users (username, password) VALUES (?, ?)";
-
-    db.query(query, [username, hash], (err, results) => {
-      if (err) {
-        console.error(err);
-        return res.render("register", {
-          // Return to avoid further execution
-          message: "Failed to register. Please try again.",
-        });
-      } else {
-        // Assuming you are using flash messages
-        req.flash(
-          "success",
-          "You have registered successfully! Please log in."
-        ); // Use flash message
-        return res.redirect("/"); // Redirect without trying to send a message
-      }
-    });
-  });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // Render login page
@@ -176,46 +209,13 @@ app.get("/login", fetchArticles, (req, res) => {
 });
 
 // Post Login Route
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  const query = "SELECT * FROM users WHERE username = ?";
-  let articles = "";
-
-  db.query(query, [username], (err, results) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("Error logging in.");
-    }
-
-    if (results.length > 0) {
-      const user = results[0]; // Get the first result
-      // Compare password using bcrypt
-      bcrypt.compare(password, user.password, (err, isMatch) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).send("Error checking password.");
-        }
-
-        if (isMatch) {
-          req.session.user = username; // Set session user
-          return res.redirect("/filter"); // Redirect to /filter after login
-        } else {
-          // Password does not match
-          res.render("login", {
-            articles: res.locals.articles,
-            message: "Login failed, User name or password not match.",
-          });
-        }
-      });
-    } else {
-      // No user found
-      res.render("login", {
-        articles: res.locals.articles,
-        message: "no User found with this name, please try again.",
-      });
-    }
-  });
-});
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/protected/filter",
+    failureRedirect: "/login",
+  })
+);
 
 // Logout route to clear session and redirect to home
 app.get("/logout", (req, res) => {
@@ -227,6 +227,106 @@ app.get("/logout", (req, res) => {
       res.redirect("/"); // Redirect to homepage after logout
     }
   });
+});
+
+// google auth invoke route
+app.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+app.get(
+  "/auth/google/secrets/protected/filter",
+  passport.authenticate("google", {
+    successRedirect: "/protected/filter",
+    failureRedirect: "/login",
+  })
+);
+
+//local starategy
+passport.use(
+  "local",
+  new Strategy(async function (user, password, cb) {
+    try {
+      const checkUser = await db.query("SELECT * FROM users WHERE email =$1", [
+        user,
+      ]);
+
+      if (checkUser.rows.length > 0) {
+        const user = checkUser.rows[0];
+        const hashpassword = user.password;
+
+        const checkpass = await bcrypt.compare(password, hashpassword);
+        console.log(checkpass);
+        if (checkpass) {
+          user.strategy = "local";
+          return cb(null, user);
+        } else {
+          return cb(null, false, { message: "invalid password" });
+        }
+      } else {
+        return cb(null, false, { message: "User not found " });
+      }
+    } catch (err) {
+      console.error(err);
+      return cb(err);
+    }
+  })
+);
+
+passport.use(
+  "google",
+  new Googlestrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/auth/google/secrets/protected/filter",
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    },
+    async (accessToken, refreshToken, profile, cb) => {
+      try {
+        console.log("Google Profile Data:", profile);
+
+        const checkuser = await db.query(
+          "SELECT * FROM users WHERE email =$1",
+          [profile.email]
+        );
+        let user;
+        if (checkuser.rows.length > 0) {
+          user = checkuser.rows[0];
+          user.strategy = "google";
+
+          user.picture = profile.photos[0]?.value || null;
+        } else {
+          console.log(profile);
+          const newuser = await db.query(
+            "INSERT INTO users (username, email, password,terms) VALUES ($1,$2,$3,$4) RETURNING *",
+            [profile.given_name, profile.email, "google", "GT"]
+          );
+
+          if (newuser.rows.length > 0) {
+            user = newuser.rows[0];
+            user.strategy = "google";
+            user.picture = profile.photos[0]?.value || null;
+          } else {
+            return cb(null, false, { message: "user creation failed" });
+          }
+        }
+        return cb(null, user);
+      } catch (err) {
+        return cb(err);
+      }
+    }
+  )
+);
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+});
+
+passport.deserializeUser((user, cb) => {
+  cb(null, user);
 });
 
 app.listen(port, () => {

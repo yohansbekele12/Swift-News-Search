@@ -3,206 +3,68 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-    <link rel="stylesheet" href="/styles/styles.css" />
-    <link rel="stylesheet" href="/styles/components.css" />
-    <link rel="stylesheet" href="/styles/responsive.css" />
-    <style>
-      /* Reset Styles */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      /* Full Page Background */
-      body {
-        background-image: url("your-background-image.jpg"); /* Add your own background image */
-        background-size: cover;
-        background-position: center;
-        font-family: Arial, sans-serif;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      /* Transparent Overlay */
-      .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 100; /* Ensure it appears above other content */
-      }
-
-      /* Login Box */
-      .login-box {
-        background-color: #ffffff;
-        padding: 20px 40px;
-        border-radius: 8px;
-        width: 300px;
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        position: relative;
-      }
-
-      /* Logo */
-      .login-box logo {
-        display: flex;
-        justify-content: center;
-        width: 300px;
-        margin-bottom: 20px;
-      }
-
-      /* Form Styles */
-      h2 {
-        font-size: 1.2em;
-        margin-bottom: 20px;
-        color: #333;
-      }
-
-      form input[type="email"] {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 1em;
-      }
-
-      form label {
-        display: block;
-        margin-bottom: 5px;
-        margin-left: 50px;
-        color: #666;
-        font-size: 0.9em;
-      }
-
-      form button {
-        margin-top: 10px;
-        width: 100%;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        background-color: #fbbd00; /* National Geographic yellow */
-        color: #fff;
-        font-size: 1em;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-
-      form button:hover {
-        background-color: #e8ab00;
-      }
-
-      .support-text {
-        font-size: 0.9em;
-        color: #666;
-        margin-top: 15px;
-      }
-
-      .support-text a {
-        color: #007bff;
-        text-decoration: none;
-      }
-
-      .support-text a:hover {
-        text-decoration: underline;
-      }
-      /* Close Button on Overlay */
-      .close-button {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        font-size: 2em; /* Increase font size for a larger "X" */
-        color: #ffffff;
-        text-decoration: none;
-        font-weight: bold;
-        cursor: pointer;
-        background: none;
-        border: none;
-        z-index: 101; /* Ensure it appears above other elements */
-      }
-
-      .close-button:hover {
-        color: #ff0000; /* Optional: Red color on hover */
-      }
-
-      /* Login Box */
-      .login-box {
-        background-color: #ffffff;
-        padding: 20px 40px;
-        border-radius: 8px;
-        width: 300px;
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        position: relative;
-      }
-    </style>
+    <title>Swift news search | Login</title>
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="stylesheet" href="/styles/auth.css" />
   </head>
-  <%- include("partials/header.ejs") %>
   <body>
-    <div class="container">
-      <div class="rows">
-        <% if (articles && articles.length) { %> <% articles.forEach(article =>
-        { %>
-
-        <div class="news">
-          <div>
-            <span class="date"><%= article.publishedAt.slice(0,10); %></span>
-            <a href="<%= article.url %>"><%= article.title %></a> <br />
-            <span class="title"><%= article.description %></span>
-            <span class="title"><%= article.content.slice(0,-12) %></span>
-          </div>
-          <div class="news-image">
-            <img src="<%= article.urlToImage %>" alt="" />
-          </div>
-        </div>
-        <hr class="thin-divider-1" />
-        <% }); %> <% } %>
+    <nav class="navbar">
+      <div class="nav-brand">
+        <a href="/" class="brand-link">
+          <h1 class="logo">Swift News Search</h1>
+        </a>
       </div>
+    </nav>
 
-      <div class="gptresponse" style="display: none">
-        <h2>AI ANALYSIS</h2>
-        <div class="chatresponsbox">
-          <p>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo
-            sed eius amet aliquam commodi repellendus atque? Saepe cum minus hic
-            nemo dolorum minima commodi, at, ut assumenda voluptas odio dolores!
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <%- include("partials/footer.ejs") %>
-
-    <!-- Transparent Overlay for Login Page -->
-    <div class="overlay">
-      <a href="/" class="close-button">×</a>
-
-      <div class="login-box">
+    <main class="auth-container">
+      <div class="auth-card">
+        <h2 class="logo">Welcome Back!</h2>
         <% if (message) { %>
-        <p class="message"><%= message %></p>
-        <% } %>
-        <div class="logo">Swift news</div>
-        <h2>Login</h2>
-        <form action="/login" method="POST">
-          <label for="username">Username</label>
-          <input type="text" id="username" name="username" required />
-          <br />
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" required />
-          <br />
-          <button type="submit">Login</button>
+        <p class="auth-subtitle warning"><%= message %></p>
+        <% } else { %>
+        <p class="auth-subtitle logo">automated news era</p>
+        <%}%>
+
+        <form class="auth-form" action="/login" method="POST">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="username" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" name="remember" />
+              Remember me
+            </label>
+            <a href="/forgot-password" class="forgot-password"
+              >Forgot Password?</a
+            >
+          </div>
+
+          <button type="submit" class="btn btn-auth">Login</button>
         </form>
+        <div class="or-divider">
+          <span>OR</span>
+        </div>
+
+        <a href="/auth/google" class="google-btn">
+          <img
+            src="https://developers.google.com/identity/images/g-logo.png"
+            alt="Google Logo"
+          />
+
+          <span>Login with Google</span>
+        </a>
+
+        <div class="auth-footer">
+          <p>Don't have an account? <a href="/register">Sign up</a></p>
+        </div>
       </div>
-    </div>
+    </main>
   </body>
 </html>

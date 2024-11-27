@@ -20,7 +20,12 @@
     "express": "^4.21.1",
     "express-session": "^1.18.1",
     "mysql2": "^3.11.3",
-    "newsapi": "^2.4.1"
+    "newsapi": "^2.4.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.13.1",
+    "whatwg-url": "^14.0.0"
   },
   "keywords": []
 }
